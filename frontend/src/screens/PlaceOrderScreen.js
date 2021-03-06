@@ -13,11 +13,11 @@ const PlaceOrderScreen = ({history}) => {
     const cart = useSelector(state => state.cart)
 
     //calculating prices
-    cart.itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+    cart.itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)
 
-    cart.shippingPrice = cart.itemsPrice > 100 ? 0 : 100
+    cart.shippingPrice = (cart.itemsPrice > 100 ? 0 : 100).toFixed(2)
 
-    cart.taxPrice = Number(( 0.13 * cart.itemsPrice).toFixed(2))
+    cart.taxPrice = Number(( 0.13 * cart.itemsPrice)).toFixed(2)
 
     cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)).toFixed(2)
 
@@ -39,7 +39,7 @@ const PlaceOrderScreen = ({history}) => {
             itemsPrice: cart.itemsPrice,
             shippingPrice: cart.shippingPrice,
             taxPrice: cart.taxPrice,
-            totalPrice: cart.itemsPrice
+            totalPrice: cart.totalPrice
         }))
     }
 
