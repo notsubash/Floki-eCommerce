@@ -24,7 +24,7 @@ const Product = ({ product }) => {
                 </Card.Text>
 
                 <Card.Text as='h4'>
-                    <strong>${product.price}</strong>
+                    <strong>रू {product.price}</strong>
                 </Card.Text>
             </Card.Body>
         </Card>

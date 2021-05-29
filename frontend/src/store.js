@@ -1,14 +1,19 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { productDetailsReducer, productListReducer } from './reducers/productReducers.js'
+import { productDetailsReducer, productListReducer, productRemoveReducer, productCreateReducer , productUpdateReducer, productCreateReviewReducer, productTopRatedReducer } from './reducers/productReducers.js'
 import { cartReducer } from './reducers/cartReducers'
-import { userLoginReducer, userRegisterReducer , userDetailsReducer , userUpdateProfileReducer} from './reducers/userReducers'
-import { orderCreateReducer, orderDetailsReducer, orderPaymentReducer, orderMineReducer } from './reducers/orderReducers'
+import { userLoginReducer, userRegisterReducer , userDetailsReducer , userUpdateProfileReducer, userListReducer, userRemoveReducer, userUpdateReducer} from './reducers/userReducers'
+import { orderCreateReducer, orderDetailsReducer, orderPaymentReducer, orderDeliverReducer ,orderMineReducer, orderListReducer  } from './reducers/orderReducers'
 
 const reducer = combineReducers({
     productList: productListReducer,
     productDetails: productDetailsReducer,
+    productRemove: productRemoveReducer,
+    productCreate: productCreateReducer,
+    productUpdate: productUpdateReducer,
+    productCreateReview: productCreateReviewReducer,
+    productsTopRated: productTopRatedReducer,
     cart: cartReducer,
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
@@ -17,7 +22,12 @@ const reducer = combineReducers({
     orderCreate: orderCreateReducer, 
     orderDetails: orderDetailsReducer,
     orderPayment: orderPaymentReducer,
-    orderMine : orderMineReducer
+    orderDeliver: orderDeliverReducer,
+    orderMine : orderMineReducer,
+    orderList: orderListReducer,
+    userList : userListReducer,
+    userRemove: userRemoveReducer,
+    userUpdate: userUpdateReducer
 })
 
 const cartItemsFromLocalStorage = localStorage.getItem('cartItems') ? JSON.parse

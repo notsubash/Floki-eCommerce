@@ -10,7 +10,8 @@
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run Server\" \"npm run client\"",
     "data:import": "node backend/seeder",
-    "data:destroy": "node backend/seeder -dnpm"
+    "data:destroy": "node backend/seeder -d",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Subash Pandey",
   "license": "MIT",
@@ -22,7 +23,10 @@
     "express-async-handler": "^1.1.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.9",
-    "node": "^15.4.0"
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "node": "^15.4.0",
+    "watch": "^1.0.2"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",

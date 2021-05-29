@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { PayPalButton } from 'react-paypal-button-v2'
 import { Link } from 'react-router-dom'
-import  { Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
+import  { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap'
 import { useDispatch, useSelector} from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { getOrderDetails, paymentOrder } from '../actions/orderActions'
-import { ORDER_PAYMENT_RESET } from '../constants/orderConstants'
+import { getOrderDetails, paymentOrder, deliverOrder } from '../actions/orderActions'
+import { ORDER_PAYMENT_RESET, ORDER_DELIVER_RESET } from '../constants/orderConstants'
 
-const OrderScreen = ({match}) => {
+const OrderScreen = ({match, history}) => {
 
     const orderID = match.params.id
 
@@ -24,7 +24,16 @@ const OrderScreen = ({match}) => {
     const orderPayment = useSelector(state => state.orderPayment)
     const { loading: loadingPayment, success: successPayment } = orderPayment
 
+    const orderDeliver = useSelector(state => state.orderDeliver)
+    const { loading: loadingDeliver, success: successDeliver } = orderDeliver
+
+    const userLogin = useSelector(state => state.userLogin)
+    const { userInfo } = userLogin
+
     useEffect(() => {
+        if(!userInfo){
+            history.push('/login')
+        }
 
         const addPayPalScript = async () => {
             const { data: clientId } = await axios.get('/api/config/paypal')
@@ -38,8 +47,9 @@ const OrderScreen = ({match}) => {
             document.body.appendChild(script)
         }
 
-        if(!order || order._id !== orderID || successPayment ){
+        if(!order || order._id !== orderID || successPayment || successDeliver ){
             dispatch({ type: ORDER_PAYMENT_RESET })
+            dispatch({ type: ORDER_DELIVER_RESET })
             dispatch(getOrderDetails(orderID))
         } else if(!order.isPaid){
             if(!window.paypal){
@@ -48,11 +58,15 @@ const OrderScreen = ({match}) => {
                 setSdkReady(true)
             }
         }
-    }, [dispatch, order, orderID, successPayment])
+    }, [dispatch, order, orderID, successPayment, successDeliver, history, userInfo])
 
     const successPaymentHandler = (paymentResult) => {
         console.log(paymentResult)
         dispatch(paymentOrder(orderID, paymentResult))
+    }
+
+    const successDeliverHandler = () => {
+        dispatch(deliverOrder(order))
     }
 
     return loading ? <Loader /> 
@@ -108,7 +122,7 @@ const OrderScreen = ({match}) => {
                                                     </Link>
                                                 </Col>
                                                 <Col md={4}>
-                                                    {item.qty} x ${item.price} = ${item.price * item.qty}
+                                                    {item.qty} x रू{item.price} = रू{item.price * item.qty}
                                                 </Col>
                                             </Row>
                                         </ListGroup.Item>
@@ -128,28 +142,28 @@ const OrderScreen = ({match}) => {
                             <ListGroup.Item>
                                <Row>
                                     <Col>Items</Col>
-                                    <Col>${order.itemsPrice.toFixed(2)}</Col>
+                                    <Col>रू {order.itemsPrice.toFixed(2)}</Col>
                                </Row>
                             </ListGroup.Item>
 
                             <ListGroup.Item>
                                <Row>
                                     <Col>Shipping</Col>
-                                    <Col>${order.shippingPrice.toFixed(2)}</Col>
+                                    <Col>रू {order.shippingPrice.toFixed(2)}</Col>
                                </Row>
                             </ListGroup.Item>
 
                             <ListGroup.Item>
                                <Row>
                                     <Col>Tax</Col>
-                                    <Col>${order.taxPrice.toFixed(2)}</Col>
+                                    <Col>रू {order.taxPrice.toFixed(2)}</Col>
                                </Row>
                             </ListGroup.Item>
 
                             <ListGroup.Item>
                                <Row>
                                     <Col>Total Amount</Col>
-                                    <Col>${order.totalPrice.toFixed(2)}</Col>
+                                    <Col>रू {order.totalPrice.toFixed(2)}</Col>
                                </Row>
                             </ListGroup.Item>
                             {!order.isPaid && (
@@ -157,8 +171,22 @@ const OrderScreen = ({match}) => {
                                     {loadingPayment && <Loader />}
                                     {!sdkReady ? <Loader />
                                     : (
-                                        <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler} />
+                                        <PayPalButton 
+                                            amount={order.totalPrice} 
+                                            onSuccess={successPaymentHandler} />
                                     )}
+                                </ListGroup.Item>
+                            )}
+                            {loadingDeliver && <Loader />}
+                            {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                                <ListGroup.Item>
+                                    <Button 
+                                        type='button' 
+                                        className='btn btn-block'
+                                        onClick={successDeliverHandler}
+                                    >
+                                    Mark As Delivered
+                                    </Button>
                                 </ListGroup.Item>
                             )}
                          </ListGroup>               
