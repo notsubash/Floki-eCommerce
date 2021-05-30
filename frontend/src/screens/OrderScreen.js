@@ -122,7 +122,7 @@ const OrderScreen = ({match, history}) => {
                                                     </Link>
                                                 </Col>
                                                 <Col md={4}>
-                                                    {item.qty} x रू{item.price} = रू{item.price * item.qty}
+                                                    {item.qty} x Rs. {item.price} = Rs. {item.price * item.qty}
                                                 </Col>
                                             </Row>
                                         </ListGroup.Item>
@@ -142,28 +142,28 @@ const OrderScreen = ({match, history}) => {
                             <ListGroup.Item>
                                <Row>
                                     <Col>Items</Col>
-                                    <Col>रू {order.itemsPrice.toFixed(2)}</Col>
+                                    <Col>Rs. {order.itemsPrice.toFixed(2)}</Col>
                                </Row>
                             </ListGroup.Item>
 
                             <ListGroup.Item>
                                <Row>
                                     <Col>Shipping</Col>
-                                    <Col>रू {order.shippingPrice.toFixed(2)}</Col>
+                                    <Col>Rs. {order.shippingPrice.toFixed(2)}</Col>
                                </Row>
                             </ListGroup.Item>
 
                             <ListGroup.Item>
                                <Row>
                                     <Col>Tax</Col>
-                                    <Col>रू {order.taxPrice.toFixed(2)}</Col>
+                                    <Col>Rs. {order.taxPrice.toFixed(2)}</Col>
                                </Row>
                             </ListGroup.Item>
 
                             <ListGroup.Item>
                                <Row>
                                     <Col>Total Amount</Col>
-                                    <Col>रू {order.totalPrice.toFixed(2)}</Col>
+                                    <Col>Rs. {order.totalPrice.toFixed(2)}</Col>
                                </Row>
                             </ListGroup.Item>
                             {!order.isPaid && (

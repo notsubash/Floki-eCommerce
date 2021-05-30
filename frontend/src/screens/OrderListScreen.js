@@ -57,7 +57,7 @@ const OrderListScreen = ({ history }) => {
                                     {order.createdAt.substring(0,10)}
                                 </td>
                                 <td>
-                                    ${order.totalPrice}
+                                    Rs. {order.totalPrice}
                                 </td>
                                 <td>
                                     {order.isPaid ? (

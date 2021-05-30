@@ -138,7 +138,7 @@ const ProfileScreen = ({ location, history }) => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>w
+                        </tbody>
                     </Table>
                 )}
             </Col>
